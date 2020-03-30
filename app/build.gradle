@@ -24,8 +24,8 @@ android {
 }
 
 dependencies {
-    //noinspection GradleCompatible
-    implementation "com.android.support:support-compat:28.0.0"
+
+
     implementation 'com.microsoft.signalr:signalr:1.0.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.2'

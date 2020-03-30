@@ -2,6 +2,7 @@ package com.example.chatsignalr;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -47,10 +48,9 @@ public class MainActivity extends AppCompatActivity {
         etNoiDung = findViewById(R.id.etNoiDung);
         btnGui = findViewById(R.id.btnSend);
 
-        this.mBuilder = new NotificationCompat.Builder(this);
-        this.mBuilder.setAutoCancel(true);
+        mBuilder = new NotificationCompat.Builder(this, "personal_notifications");
 
-        hubConnection = HubConnectionBuilder.create("http://192.168.55.4:63139/chathub").build();
+        hubConnection = HubConnectionBuilder.create("http://192.168.1.253:63139/chathub").build();
 
         handler = new Handler();
         runnable = new Runnable() {
@@ -65,15 +65,9 @@ public class MainActivity extends AppCompatActivity {
         hubConnection.on("NhanTin",(name, messeger) ->{
             // String t = name + messeger;
 
-
-            this.mBuilder.setTicker("Đây là Ticker");
-            this.mBuilder.setContentTitle("Thông Báo");
-            this.mBuilder.setContentText("Bạn Có Tin Nhấn mới");
-            NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            Notification notification = mBuilder.build();
-            notificationManager.notify(123456, notification);
-
+            DisplayNotification();
             tvHien.setText(name + ": "+ messeger);
+
        },String.class, String.class);
 
 
@@ -90,6 +84,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void DisplayNotification(){
+        mBuilder.setTicker("Đây là Ticker");
+        mBuilder.setSmallIcon(R.drawable.ic_speaker);
+        mBuilder.setContentTitle("Thông Báo");
+        mBuilder.setContentText("Bạn Có Tin Nhấn mới");
+        mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        NotificationManagerCompat nmc = NotificationManagerCompat.from(this);
+       nmc.notify(001, mBuilder.build());
     }
 
     @Override
